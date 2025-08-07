@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelector(".nav-links");
 
   menu.addEventListener("click", () => {
-    navLinks.classList.toggle("show");
+    navLinks.style.display = navLinks.style.display === "flex" ? "none" : "flex";
   });
 
   // Optional: scroll reveal

@@ -253,6 +253,7 @@ footer {
   }
 
   .nav-links {
+    display: none !important;
     position: absolute;
     top: 60px;
     right: 0;
