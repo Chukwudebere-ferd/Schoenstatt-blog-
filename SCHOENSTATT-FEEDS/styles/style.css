@@ -322,3 +322,8 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none !important;
+  }
+}
