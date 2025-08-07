@@ -1,0 +1,123 @@
+:root {
+  --bg-panel: #181433;
+  --bg-dark: #0d0b1f;
+  --glass-color: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent: #9f43f0;
+  --text-light: #eee;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+/* Hide the Google Translate banner */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+} 
+
+
+/* Optional: Hide the mini translate logo */
+.goog-logo-link {
+  display: none !important;
+}
+.goog-te-gadget {
+  display: none !important;
+}
+
+
+body {
+  top: 0px !important;
+  background: var(--bg-panel);
+  color: var(--text-light);
+}
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--bg-panel);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+header img {
+  width: 50px;
+  border-radius: 50%;
+}
+header nav {
+  position: relative;
+}
+header .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+header .nav-links li a {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+header .nav-links li a:hover {
+  color: var(--accent);
+}
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+}
+.social a {
+  color: var(--text-light);
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+.lang select {
+  background: var(--bg-dark);
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 5px;
+  padding: 0.2rem;
+}
+.aboutUS{
+  margin: 100px 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.aboutUS img{
+  width: 100%;
+  margin: 10px 0px;
+  border-radius: 10px;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-text {
+  flex: 1;
+  background: var(--glass-color);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+}
+.about-text:hover {
+  transform: translateY(-5px);
+}
+.aboutUS h3 {
+  font-size: 20px;
+  margin-bottom: 1rem;
+}
+footer {
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
