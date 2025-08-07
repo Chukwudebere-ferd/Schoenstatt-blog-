@@ -241,6 +241,17 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
+  header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--bg-panel);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
   .menu-toggle {
     display: block;
     font-size: 1.6rem;
