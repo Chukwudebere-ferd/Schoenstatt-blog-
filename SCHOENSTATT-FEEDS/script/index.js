@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const menu = document.querySelector(".menu-toggle");
+  const menu = document.querySelector("#menu-toggle");
   const navLinks = document.querySelector(".nav-links");
 
   menu.addEventListener("click", () => {
-    navLinks.style.display = navLinks.style.display === "flex" ? "none" : "flex";
+   navLinks.classList.toggle("show");
   });
+
+
+
 
   // Optional: scroll reveal
   const aboutSection = document.querySelector(".about-text");
