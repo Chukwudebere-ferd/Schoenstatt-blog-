@@ -121,3 +121,14 @@ footer {
   font-size: 0.9rem;
   color: var(--text-light);
 }
+#socialBottom{
+  display: none;
+}
+@media (max-width:498px) {
+ #socialHead{
+  display: none;
+ }
+  #socialBottom{
+  display: flex;
+}
+}
