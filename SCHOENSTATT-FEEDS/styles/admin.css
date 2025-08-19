@@ -5,7 +5,11 @@
   --glass-border: rgba(255, 255, 255, 0.1);
   --accent: #9f43f0;
   --text-light: #eee;
+  --success: #28a745;
+  --danger: #d9534f;
+  --primary: #1f43d5;
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -15,219 +19,334 @@
   outline: none;
   border: none;
 }
+
 body {
   background: var(--bg-panel);
   color: var(--text-light);
 }
-/* login css */
-.form-wrapper{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.form-wrapper::after{
-    content: "";
-    width: 20px;
-    background-color: #eee;
-    height: 20px;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    padding: 5px;
-    transform: translate(-50%, -50);
-    z-index: -100;
-    opacity: 0.7;
-    animation: flyin infinite 10s forwards;
-}
-@keyframes flyin {
-    10%{
-        transform: translatez(300px);
-    }
-     50%{
-        transform: translate(800px);
-        transform: rotate(360deg);
-    }
-         
-    70%{
-        opacity: 0;
-        transform: rotate(300deg);
-        transform: translateY(300px);
-    }
-    
-    100%{
-        transform: translateX(300px);
-    }
-}
-#login{
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    width: 100%;
-    gap: 1rem;
-    border-radius: 15px;
-}
-#login input, button{
-    padding: 7px;
+
+/* ===== Login ===== */
+.form-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/*admin panel css  */
-#adminPanel{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: space-between;
+#login {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  width: 90%;
+  gap: 1rem;
+  border-radius: 15px;
+  background: var(--bg-dark);
+  padding: 20px;
 }
-.main{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    height: 100vh;
+
+#login input,
+#login button {
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--glass-color);
+  color: var(--text-light);
+  width: 100%;
 }
-#adminPanel .leftMenu{
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    border-right: 2px solid var(--accent);
-    border-radius: 10px;
+
+/* ===== Admin Panel ===== */
+#adminPanel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
 }
-.leftMenu h1{
-    margin: 10px 25px;
+
+.main {
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
-.leftMenu ul{
-    display: flex;
-    flex-direction: column;
-    margin: 10px 25px;
-    list-style-type: none;
-    cursor: pointer;
-    padding: 10px;
+
+/* Left Menu */
+.leftMenu {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid var(--accent);
+  padding: 20px;
+  border-radius: 10px;
 }
-.leftMenu ul li{
-    margin: 20px;
+
+.leftMenu h1 {
+  margin-bottom: 15px;
 }
-.leftMenu ul li:hover{
-    border-radius: 10px;
-    width: fit-content;
-    padding: 10px;
-    background-color: var(--accent);
-    color: var(--text-light);
+
+.leftMenu ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
-#adminPanel .rightMenu{
-    width: 70%;
-    margin: 5px;
-    padding: 10px 20px;
-    border: 2px solid var(--accent);
-    border-radius: 10px;
+
+.leftMenu ul li {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
 }
-#adminPanel .rightMenu p{
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    font-weight: bolder;
-    animation: pop infinite ease-in 4s forwards alternate-reverse;
+
+.leftMenu ul li:hover {
+  background-color: var(--accent);
+  color: var(--text-light);
 }
+
+/* Right Menu */
+.rightMenu {
+  width: 75%;
+  margin: 10px;
+  padding: 20px;
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  position: relative;
+}
+
+.rightMenu p {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  animation: pop 4s ease-in infinite alternate-reverse;
+}
+
 @keyframes pop {
-    from{
-        transform: translatey(5px);
-    }
-    to{
-        transform: translatey(-10px);
-    }
+  from {
+    transform: translatey(5px);
+  }
+  to {
+    transform: translatey(-10px);
+  }
 }
-#createBlog{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-   max-width: 600px;
-    border: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 40px;
 
+/* ===== Content Sections ===== */
+.content-section {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-dark);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  padding: 30px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
 }
-#newsForm{
-    position: relative;
-    margin-top: 10px;
-    display: flex;
+
+.content-section.active {
+  display: block;
+}
+
+/* ===== Create Blog ===== */
+#newsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#newsForm input,
+#newsForm textarea,
+#newsForm button {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: var(--glass-color);
+  color: var(--text-light);
+}
+
+#newsForm textarea {
+  resize: vertical;
+}
+
+.imagePreview {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.imagePreview img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 2px solid var(--accent);
+  position: relative;
+}
+
+/* ===== Manage Blog ===== */
+.blog-card {
+  background: var(--glass-color);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.blog-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.blog-images img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid var(--accent);
+}
+
+.blog-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.blog-actions button {
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.blog-actions .editBtn {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.blog-actions .deleteBtn {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.blog-actions button:hover {
+  opacity: 0.8;
+}
+
+/* Edit inputs inside blog card */
+.blog-card input[type="text"],
+.blog-card textarea {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  resize: vertical;
+}
+
+.blog-card button.saveEditBtn {
+  background-color: var(--success);
+  color: #fff;
+}
+
+.blog-card button.cancelEditBtn {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+/* ===== Settings ===== */
+#settings input,
+#settings button {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  width: 100%;
+  background-color: var(--glass-color);
+  color: var(--text-light);
+}
+
+/* ===== Logout ===== */
+#logoutConfirm button {
+  margin: 6px 0;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: var(--glass-color);
+  color: var(--text-light);
+}
+
+#logoutConfirm button:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .leftMenu {
+    width: 30%;
+  }
+
+  .rightMenu {
+    width: 70%;
+  }
+
+  .blog-images img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  #adminPanel {
     flex-direction: column;
-    padding: 40px;
-}
-#newsForm h2{
-    margin-bottom: 10px;
-}
-#newsForm input, button{
-    max-width: 400px;
-    border-radius: 5px;
-    border: none;
+  }
+
+  .leftMenu {
     width: 100%;
-    padding: 5px;
-}
-#newsForm textarea{
-    max-width: 400px;
-    border-radius: 5px;
-    border: none;
-    width: 100%;
-    padding: 5px;
-}
-#createBlog .imagePreview{
-    max-width: 400px;
+    border-right: none;
+    border-bottom: 2px solid var(--accent);
+    flex-direction: row;
+    justify-content: space-around;
     padding: 10px;
-}
-#createBlog .imagePreview img{
+  }
+
+  .rightMenu {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .blog-images img {
     width: 50px;
-    border-radius: 5px;
-    border:2px solid #9f43f0;
-    margin: 0px 5px;
+    height: 50px;
+  }
 }
-#settings{
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    max-width: 400px;
-    border: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 30px;
-}
-#settings #changePassword{
-    text-align: center;
-}
-#settings #changePassword #passwordReset{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    max-width: 400px;
-}
-#settings #changePassword #passwordReset input{
-    padding: 10px 15px;
-    margin: 5px 0px;
-    border-radius: 10px;
-    background-color: #0d0b1f;
-    color: #9f43f0;
-}
-#logoutConfirm{
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    max-width: 400px;
-    border: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 50px;
-}
-#logoutConfirm button{
-    margin: 6px 0px;
-    cursor:pointer;
-}
-#logoutConfirm button:hover{
-    background-color: #0d0b1f;
-    color: #eee;
-}
-.content-section{
-    display: none;
-}
-.content-section.active{
-    display: block;
+
+@media (max-width: 480px) {
+  #newsForm input,
+  #newsForm textarea,
+  #newsForm button,
+  #settings input,
+  #settings button {
+    font-size: 14px;
+  }
+
+  .blog-images img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .blog-actions button {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
 }
