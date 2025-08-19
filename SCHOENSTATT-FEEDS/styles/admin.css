@@ -1,0 +1,233 @@
+:root {
+  --bg-panel: #181433;
+  --bg-dark: #0d0b1f;
+  --glass-color: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent: #9f43f0;
+  --text-light: #eee;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  text-transform: capitalize;
+  outline: none;
+  border: none;
+}
+body {
+  background: var(--bg-panel);
+  color: var(--text-light);
+}
+/* login css */
+.form-wrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-wrapper::after{
+    content: "";
+    width: 20px;
+    background-color: #eee;
+    height: 20px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    padding: 5px;
+    transform: translate(-50%, -50);
+    z-index: -100;
+    opacity: 0.7;
+    animation: flyin infinite 10s forwards;
+}
+@keyframes flyin {
+    10%{
+        transform: translatez(300px);
+    }
+     50%{
+        transform: translate(800px);
+        transform: rotate(360deg);
+    }
+         
+    70%{
+        opacity: 0;
+        transform: rotate(300deg);
+        transform: translateY(300px);
+    }
+    
+    100%{
+        transform: translateX(300px);
+    }
+}
+#login{
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    width: 100%;
+    gap: 1rem;
+    border-radius: 15px;
+}
+#login input, button{
+    padding: 7px;
+}
+
+/*admin panel css  */
+#adminPanel{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+}
+.main{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100vh;
+}
+#adminPanel .leftMenu{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid var(--accent);
+    border-radius: 10px;
+}
+.leftMenu h1{
+    margin: 10px 25px;
+}
+.leftMenu ul{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 25px;
+    list-style-type: none;
+    cursor: pointer;
+    padding: 10px;
+}
+.leftMenu ul li{
+    margin: 20px;
+}
+.leftMenu ul li:hover{
+    border-radius: 10px;
+    width: fit-content;
+    padding: 10px;
+    background-color: var(--accent);
+    color: var(--text-light);
+}
+#adminPanel .rightMenu{
+    width: 70%;
+    margin: 5px;
+    padding: 10px 20px;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+}
+#adminPanel .rightMenu p{
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    font-weight: bolder;
+    animation: pop infinite ease-in 4s forwards alternate-reverse;
+}
+@keyframes pop {
+    from{
+        transform: translatey(5px);
+    }
+    to{
+        transform: translatey(-10px);
+    }
+}
+#createBlog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   max-width: 600px;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 40px;
+
+}
+#newsForm{
+    position: relative;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+}
+#newsForm h2{
+    margin-bottom: 10px;
+}
+#newsForm input, button{
+    max-width: 400px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    padding: 5px;
+}
+#newsForm textarea{
+    max-width: 400px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    padding: 5px;
+}
+#createBlog .imagePreview{
+    max-width: 400px;
+    padding: 10px;
+}
+#createBlog .imagePreview img{
+    width: 50px;
+    border-radius: 5px;
+    border:2px solid #9f43f0;
+    margin: 0px 5px;
+}
+#settings{
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    max-width: 400px;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 30px;
+}
+#settings #changePassword{
+    text-align: center;
+}
+#settings #changePassword #passwordReset{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 400px;
+}
+#settings #changePassword #passwordReset input{
+    padding: 10px 15px;
+    margin: 5px 0px;
+    border-radius: 10px;
+    background-color: #0d0b1f;
+    color: #9f43f0;
+}
+#logoutConfirm{
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    max-width: 400px;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 50px;
+}
+#logoutConfirm button{
+    margin: 6px 0px;
+    cursor:pointer;
+}
+#logoutConfirm button:hover{
+    background-color: #0d0b1f;
+    color: #eee;
+}
+.content-section{
+    display: none;
+}
+.content-section.active{
+    display: block;
+}
