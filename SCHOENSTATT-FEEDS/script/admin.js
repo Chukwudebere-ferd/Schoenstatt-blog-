@@ -57,45 +57,145 @@ window.logOUT = async () => {
 };
 
 // ====================== CREATE BLOG ======================
-newsForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const title = newsForm.querySelector("input[type='text']").value;
-  const description = newsForm.querySelector("textarea").value;
-  const file = uploadFile.files[0];
+// ====================== CREATE BLOG ======================
+let selectedImages = [];
 
-  let imageUrl = "";
+function initCreateBlog() {
+    const uploadFile = document.getElementById("uploadFile");
+    const imagePreview = document.querySelector(".imagePreview");
+    const newsForm = document.getElementById("newsForm");
 
-  if (file) {
-    // Upload image to ImgBB
-    const formData = new FormData();
-    formData.append("image", file);
+    // Loader
+    const loader = document.createElement("div");
+    loader.innerText = "Uploading...";
+    loader.style.display = "none";
+    loader.style.textAlign = "center";
+    loader.style.marginTop = "10px";
+    newsForm.appendChild(loader);
 
-    try {
-      const res = await fetch("https://api.imgbb.com/1/upload?key=5ef7cd278c7926f46592ee2d4bcb78fa", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      imageUrl = data.data.url;
-    } catch (err) {
-      alert("Image upload failed ❌");
-      return;
-    }
-  }
+    // Handle file selection
+    uploadFile.addEventListener("change", () => {
+        const files = Array.from(uploadFile.files);
 
-  try {
-    await addDoc(collection(db, "blogs"), {
-      title,
-      description,
-      image: imageUrl,
-      createdAt: serverTimestamp(),
+        // Add new files to selectedImages but max 5
+        files.forEach(file => {
+            if (selectedImages.length < 5) {
+                selectedImages.push(file);
+            }
+        });
+
+        renderPreview();
+        uploadFile.value = ""; // reset input so same file can be re-added if removed
     });
-    alert("Blog published ✅");
-    newsForm.reset();
-  } catch (err) {
-    alert("Error publishing blog ❌ " + err.message);
-  }
-});
+
+    // Handle form submit
+    newsForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const title = newsForm.querySelector("input[type='text']").value.trim();
+        const description = newsForm.querySelector("textarea").value.trim();
+
+        if (!title || !description) {
+            alert("Please fill in title and description");
+            return;
+        }
+
+        loader.style.display = "block"; // show loader
+
+        try {
+            // Upload images to Imgur
+            const imageLinks = [];
+            for (let file of selectedImages) {
+                const formData = new FormData();
+                formData.append("image", file);
+
+                const res = await fetch("https://api.imgur.com/3/image", {
+                    method: "POST",
+                    headers: {
+                        Authorization: "Client-ID 5ef7cd278c7926f46592ee2d4bcb78fa"
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    imageLinks.push(data.data.link);
+                } else {
+                    console.error("Imgur upload failed:", data);
+                }
+            }
+
+            // Save blog to Firestore
+            await addDoc(collection(db, "blogs"), {
+                title,
+                description,
+                images: imageLinks,
+                createdAt: serverTimestamp(),
+                author: auth.currentUser?.email || "admin"
+            });
+
+            alert("Blog published successfully ✅");
+            newsForm.reset();
+            selectedImages = [];
+            renderPreview();
+        } catch (err) {
+            console.error(err);
+            alert("Error publishing blog ❌");
+        } finally {
+            loader.style.display = "none"; // hide loader
+        }
+    });
+
+    // Function to re-render previews
+    function renderPreview() {
+        imagePreview.innerHTML = "";
+        selectedImages.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const wrapper = document.createElement("div");
+                wrapper.style.position = "relative";
+                wrapper.style.display = "inline-block";
+                wrapper.style.margin = "5px";
+
+                // image
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.style.width = "50px";
+                img.style.height = "50px";
+                img.style.objectFit = "cover";
+                img.style.border = "1px solid #ccc";
+                img.style.borderRadius = "5px";
+
+                // remove button
+                const removeBtn = document.createElement("span");
+                removeBtn.innerHTML = "❌";
+                removeBtn.style.position = "absolute";
+                removeBtn.style.top = "2px";
+                removeBtn.style.right = "2px";
+                removeBtn.style.cursor = "pointer";
+                removeBtn.style.background = "rgba(0,0,0,0.5)";
+                removeBtn.style.color = "#fff";
+                removeBtn.style.fontSize = "12px";
+                removeBtn.style.padding = "2px 4px";
+                removeBtn.style.borderRadius = "3px";
+
+                removeBtn.addEventListener("click", () => {
+                    selectedImages.splice(index, 1); // remove from array
+                    renderPreview(); // re-render
+                });
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(removeBtn);
+                imagePreview.appendChild(wrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+// Initialize function when page loads
+document.addEventListener("DOMContentLoaded", initCreateBlog);
+
 
 
 const links = document.querySelectorAll(".leftMenu li")
