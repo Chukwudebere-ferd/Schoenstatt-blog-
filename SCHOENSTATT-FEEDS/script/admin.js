@@ -58,7 +58,10 @@ window.logOUT = async () => {
 };
 
 // ====================== CREATE BLOG ======================
-let selectedImages = [];
+
+
+// ====================== CREATE BLOG ======================
+let selectedImages = []; // keep global
 
 function initCreateBlog() {
   const uploadFile = document.getElementById("uploadFile");
@@ -72,8 +75,6 @@ function initCreateBlog() {
   loader.style.marginTop = "10px";
   newsForm.appendChild(loader);
 
-  let selectedImages = [];
-
   // Handle file selection
   uploadFile.addEventListener("change", (e) => {
     const files = Array.from(e.target.files);
@@ -83,7 +84,7 @@ function initCreateBlog() {
       }
     });
     renderPreview();
-    uploadFile.value = "";
+    uploadFile.value = ""; // reset input so same file can be reselected
   });
 
   // Submit form
@@ -99,37 +100,37 @@ function initCreateBlog() {
     loader.style.display = "block";
 
     try {
-     const  API_KEY = "5ef7cd278c7926f46592ee2d4bcb78fa";
+      const API_KEY = "5ef7cd278c7926f46592ee2d4bcb78fa";
 
-const uploadPromises = selectedImages.map(file => {
-  const formData = new FormData();
-  formData.append("image", file);
+      // Upload all selected images to ImgBB
+      const uploadPromises = selectedImages.map(file => {
+        const formData = new FormData();
+        formData.append("image", file);
 
-  return fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success && data.data.url) return data.data.url;
-    else throw new Error("Upload failed");
-  });
-     
+        return fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+          method: "POST",
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data.url) return data.data.url;
+          else throw new Error("Upload failed");
+        });
       });
 
       const imageLinks = await Promise.all(uploadPromises);
 
-      // Save blog
+      // Save blog with images array
       await addDoc(collection(db, "blogs"), {
         title,
         description,
-        images: imageLinks,
+        images: imageLinks,  // ✅ multiple images stored
         createdAt: serverTimestamp(),
         author: auth.currentUser?.email || "admin"
       });
 
       alert("Blog published ✅");
-      selectedImages = [];
+      selectedImages = []; // reset
       newsForm.reset();
       renderPreview();
       loadBlogs();
@@ -142,6 +143,7 @@ const uploadPromises = selectedImages.map(file => {
     }
   });
 
+  // Render selected images preview
   function renderPreview() {
     imagePreview.innerHTML = "";
     selectedImages.forEach(file => {
@@ -154,8 +156,8 @@ const uploadPromises = selectedImages.map(file => {
 
         const img = document.createElement("img");
         img.src = e.target.result;
-        img.style.width = "50px";
-        img.style.height = "50px";
+        img.style.width = "60px";
+        img.style.height = "60px";
         img.style.objectFit = "cover";
         img.style.border = "1px solid #ccc";
         img.style.borderRadius = "5px";
@@ -185,6 +187,9 @@ const uploadPromises = selectedImages.map(file => {
     });
   }
 }
+
+document.addEventListener("DOMContentLoaded", initCreateBlog);
+
 
 
 

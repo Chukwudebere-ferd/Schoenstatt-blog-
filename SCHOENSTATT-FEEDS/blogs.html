@@ -6,37 +6,32 @@
   <title>All Blogs</title>
   <link rel="stylesheet" href="./styles/blogs.css">
   <link rel="shortcut icon" href="./assests/schoensttatt header img.jpg" type="image/x-icon">
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
   <header>
-      <div class="left"><img src="./assests/schoenstatt logo.jpg" alt="logo" /></div>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">home</a></li>
-        </ul>
-        <i class="fas fa-bars menu-toggle" style="display: none;"></i>
-      </nav>
-      <div id="socialHead" class="social">
-        <a href="https://www.facebook.com/share/1JHzV5PHPw/
-"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/schoenstattyouthsnigeria?igsh=anQ2dDFuZXZkcDUy
-"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.tiktok.com/@svynigeria?_t=8p3XvlbMl7N&_r=1 "><i class="fab fa-tiktok"></i></a>
-      </div>
-      <div class="lang">
-         <select id="language">
-      <option value="">Select Language</option>
-      <option value="en">English</option>
-      <option value="de">Deutsch</option>
-      <option value="pt">Português</option>
-      <option value="es">Español</option>
-      <option value="it">Italiano</option>
-    </select>
-      </div>
-    </header>
+    <div class="left"><img src="./assests/schoenstatt logo.jpg" alt="logo" /></div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">home</a></li>
+      </ul>
+      <i class="fas fa-bars menu-toggle" style="display: none;"></i>
+    </nav>
+    <div id="socialHead" class="social">
+      <a href="https://www.facebook.com/share/1JHzV5PHPw/"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com/schoenstattyouthsnigeria?igsh=anQ2dDFuZXZkcDUy"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@svynigeria?_t=8p3XvlbMl7N&_r=1 "><i class="fab fa-tiktok"></i></a>
+    </div>
+    <div class="lang">
+      <select id="language">
+        <option value="">Select Language</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+        <option value="es">Español</option>
+        <option value="it">Italiano</option>
+      </select>
+    </div>
+  </header>
 
   <main>
     <section class="blog-header">
@@ -54,41 +49,37 @@
     <img class="modal-content" id="modalImage">
   </div>
 
+  <div id="google_translate_element" style="display:none;"></div>
 
-
-<div id="google_translate_element" style="display:none;"></div>
-
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement(
-      { pageLanguage: 'en', includedLanguages: 'en,de,pt,es,it' },
-      'google_translate_element'
-    );
-  }
-
-  // ✅ Function to switch language
-  function changeLanguage(lang) {
-    var checkExist = setInterval(function () {
-      var select = document.querySelector("select.goog-te-combo");
-      if (select) {
-        select.value = lang;
-        // Fire both input & change events for better cross-browser support
-        select.dispatchEvent(new Event("change"));
-        select.dispatchEvent(new Event("input"));
-        clearInterval(checkExist);
-      }
-    }, 500);
-  }
-
-  // ✅ Attach listener to your custom dropdown
-  document.getElementById("language").addEventListener("change", function () {
-    if (this.value) {
-      changeLanguage(this.value);
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement(
+        { pageLanguage: 'en', includedLanguages: 'en,de,pt,es,it' },
+        'google_translate_element'
+      );
     }
-  });
-</script>
 
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script type="module" src="./script/blogs.js"></script>
+    function changeLanguage(lang) {
+      var checkExist = setInterval(function () {
+        var select = document.querySelector("select.goog-te-combo");
+        if (select) {
+          select.value = lang;
+          select.dispatchEvent(new Event("change"));
+          select.dispatchEvent(new Event("input"));
+          clearInterval(checkExist);
+        }
+      }, 500);
+    }
+
+    document.getElementById("language").addEventListener("change", function () {
+      if (this.value) {
+        changeLanguage(this.value);
+      }
+    });
+  </script>
+
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- ✅ Only load your blogs.js as module -->
+  <script type="module" src="./script/blogs.js"></script>
 </body>
 </html>
