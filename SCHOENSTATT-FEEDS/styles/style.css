@@ -106,6 +106,7 @@ header .nav-links li a:hover {
   object-fit: cover;
 }
 .hero h1 {
+  text-transform: uppercase;
   position: relative;
   z-index: 2;
   text-align: center;
