@@ -232,13 +232,42 @@ async function loadBlogs() {
       blogsList.appendChild(blogCard);
     });
 
-    // Attach delete/edit handlers as before...
-    // (Keep your existing edit/delete logic here)
+    // ✅ Attach event listeners after rendering
+    const deleteButtons = blogsList.querySelectorAll(".deleteBtn");
+    deleteButtons.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        if (confirm("Are you sure you want to delete this blog?")) {
+          await deleteDoc(doc(db, "blogs", id));
+          alert("Blog deleted ✅");
+          loadBlogs(); // reload blogs
+        }
+      });
+    });
+
+    const editButtons = blogsList.querySelectorAll(".editBtn");
+    editButtons.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const title = prompt("Enter new title:");
+        const description = prompt("Enter new description:");
+        if (title && description) {
+          await updateDoc(doc(db, "blogs", id), {
+            title,
+            description
+          });
+          alert("Blog updated ✅");
+          loadBlogs(); // reload blogs
+        }
+      });
+    });
+
   } catch (err) {
     console.error(err);
     blogsList.innerHTML = "<p>Failed to load blogs.</p>";
   }
 }
+
 
 
 // Show Manage Blogs when menu is clicked

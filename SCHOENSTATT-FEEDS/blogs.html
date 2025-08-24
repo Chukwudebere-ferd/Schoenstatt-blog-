@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Blogs</title>
+  <link rel="stylesheet" href="./styles/blogs.css">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Schoenstatt</div>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">Home</a>
+        <a href="blogs.html" class="active">Blogs</a>
+        <select id="language">
+          <option value="">🌐</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+        </select>
+      </div>
+      <div id="menu-toggle">☰</div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="blog-header">
+      <h1>Our Blog</h1>
+      <input type="text" id="searchInput" placeholder="Search posts by title...">
+    </section>
+
+    <section id="blogsContainer" class="blogs-container">
+      <!-- Blogs will be injected here -->
+    </section>
+  </main>
+
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script type="module" src="./script/blogs.js"></script>
+</body>
+</html>
