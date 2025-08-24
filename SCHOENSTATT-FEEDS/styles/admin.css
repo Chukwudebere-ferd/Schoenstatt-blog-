@@ -48,6 +48,10 @@ body {
   padding: 20px;
 }
 
+#login h2 {
+  text-align: center;
+}
+
 #login input,
 #login button {
   padding: 10px;
@@ -55,6 +59,12 @@ body {
   background: var(--glass-color);
   color: var(--text-light);
   width: 100%;
+  cursor: pointer;
+}
+
+#login button:hover {
+  background-color: var(--accent);
+  color: #fff;
 }
 
 /* ===== Admin Panel ===== */
@@ -113,6 +123,10 @@ body {
   position: relative;
 }
 
+.rightMenu h1 {
+  margin-bottom: 10px;
+}
+
 .rightMenu p {
   position: absolute;
   top: 5%;
@@ -123,12 +137,8 @@ body {
 }
 
 @keyframes pop {
-  from {
-    transform: translatey(5px);
-  }
-  to {
-    transform: translatey(-10px);
-  }
+  from { transform: translatey(5px); }
+  to { transform: translatey(-10px); }
 }
 
 /* ===== Content Sections ===== */
@@ -292,32 +302,29 @@ body {
 
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
-  .leftMenu {
-    width: 30%;
-  }
-
-  .rightMenu {
-    width: 70%;
-  }
-
-  .blog-images img {
-    width: 60px;
-    height: 60px;
-  }
+  .leftMenu { width: 30%; }
+  .rightMenu { width: 70%; }
+  .blog-images img { width: 60px; height: 60px; }
 }
 
-/* ===== Dashboard Home Responsive Fix ===== */
 @media (max-width: 768px) {
+  .main { flex-direction: column; }
+
+  .leftMenu {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid var(--accent);
+    padding: 15px;
+  }
+
   .rightMenu {
     width: 100%;
     margin: 10px 0;
     padding: 15px;
-    border: 2px solid var(--accent);
     border-radius: 10px;
     position: relative;
   }
 
-  /* Make the popping paragraph responsive */
   .rightMenu p {
     position: relative;
     top: 0;
@@ -328,7 +335,6 @@ body {
     margin-bottom: 10px;
   }
 
-  /* Ensure home content sections scale correctly */
   .content-section {
     width: 95%;
     max-width: 100%;
@@ -338,18 +344,12 @@ body {
   }
 }
 
-/* Extra small devices */
 @media (max-width: 480px) {
-  .rightMenu {
-    padding: 12px;
-  }
+  .rightMenu { padding: 12px; }
+  .rightMenu p { font-size: 12px; }
+  .content-section { padding: 15px; }
 
-  .rightMenu p {
-    font-size: 12px;
-  }
-
-  .content-section {
-    padding: 15px;
-  }
+  #newsForm input,
+  #newsForm textarea,
+  #newsForm button { padding: 6px 10px; }
 }
-
