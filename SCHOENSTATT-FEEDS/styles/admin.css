@@ -306,47 +306,50 @@ body {
   }
 }
 
+/* ===== Dashboard Home Responsive Fix ===== */
 @media (max-width: 768px) {
-  #adminPanel {
-    flex-direction: column;
-  }
-
-  .leftMenu {
-    width: 100%;
-    border-right: none;
-    border-bottom: 2px solid var(--accent);
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 10px;
-  }
-
   .rightMenu {
     width: 100%;
     margin: 10px 0;
+    padding: 15px;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    position: relative;
   }
 
-  .blog-images img {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-@media (max-width: 480px) {
-  #newsForm input,
-  #newsForm textarea,
-  #newsForm button,
-  #settings input,
-  #settings button {
+  /* Make the popping paragraph responsive */
+  .rightMenu p {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
     font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
   }
 
-  .blog-images img {
-    width: 45px;
-    height: 45px;
-  }
-
-  .blog-actions button {
-    font-size: 12px;
-    padding: 5px 8px;
+  /* Ensure home content sections scale correctly */
+  .content-section {
+    width: 95%;
+    max-width: 100%;
+    max-height: 80vh;
+    padding: 20px;
+    overflow-y: auto;
   }
 }
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .rightMenu {
+    padding: 12px;
+  }
+
+  .rightMenu p {
+    font-size: 12px;
+  }
+
+  .content-section {
+    padding: 15px;
+  }
+}
+
