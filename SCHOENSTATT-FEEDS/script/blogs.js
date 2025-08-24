@@ -21,36 +21,50 @@ let allBlogs = []; // keep original data
 
 // Fetch blogs
 async function loadBlogs() {
-  blogsContainer.innerHTML = "<p>Loading...</p>";
+  try {
+    blogsContainer.innerHTML = "<p>Loading...</p>";
 
-  const q = query(collection(db, "blogs"), orderBy("timestamp", "desc"));
-  const querySnapshot = await getDocs(q);
+    let q;
+    try {
+      // Try ordering by timestamp
+      q = query(collection(db, "blogs"), orderBy("timestamp", "desc"));
+    } catch (err) {
+      console.warn("⚠️ Falling back: some docs may not have 'timestamp'");
+      q = query(collection(db, "blogs"));
+    }
 
-  allBlogs = [];
-  querySnapshot.forEach(doc => {
-    allBlogs.push({ id: doc.id, ...doc.data() });
-  });
+    const querySnapshot = await getDocs(q);
 
-  renderBlogs(allBlogs);
+    allBlogs = [];
+    querySnapshot.forEach(doc => {
+      allBlogs.push({ id: doc.id, ...doc.data() });
+    });
 
-  // Search functionality with debounce
-  let debounceTimer;
-  searchInput.addEventListener("input", (e) => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      const term = e.target.value.toLowerCase();
-      const filtered = allBlogs.filter(b =>
-        b.title.toLowerCase().includes(term) ||
-        (b.content && b.content.toLowerCase().includes(term))
-      );
-      renderBlogs(filtered);
-    }, 300);
-  });
+    renderBlogs(allBlogs);
+
+    // Search functionality with debounce
+    let debounceTimer;
+    searchInput.addEventListener("input", (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const term = e.target.value.toLowerCase();
+        const filtered = allBlogs.filter(b =>
+          b.title?.toLowerCase().includes(term) ||
+          b.content?.toLowerCase().includes(term)
+        );
+        renderBlogs(filtered);
+      }, 300);
+    });
+
+  } catch (error) {
+    console.error("❌ Error fetching blogs:", error);
+    blogsContainer.innerHTML = `<p style="color:red;">Error loading blogs. Check console.</p>`;
+  }
 }
 
 // Render blogs
 function renderBlogs(blogs) {
-  if (blogs.length === 0) {
+  if (!blogs || blogs.length === 0) {
     blogsContainer.innerHTML = "<p>No posts found.</p>";
     return;
   }
@@ -68,9 +82,9 @@ function renderBlogs(blogs) {
           `).join("") : ""}
         </div>
         <div class="content">
-          <h3>${blog.title}</h3>
+          <h3>${blog.title || "Untitled"}</h3>
           <small>${date}</small>
-          <p>${blog.content}</p>
+          <p>${blog.content || ""}</p>
         </div>
       </div>
     `;
@@ -102,6 +116,7 @@ loadBlogs();
 document.addEventListener("DOMContentLoaded", () => {
   const menu = document.querySelector("#menu-toggle");
   const navLinks = document.querySelector(".nav-links");
-  menu.addEventListener("click", () => navLinks.classList.toggle("show"));
+  if (menu && navLinks) {
+    menu.addEventListener("click", () => navLinks.classList.toggle("show"));
+  }
 });
-
