@@ -105,14 +105,3 @@ document.addEventListener("DOMContentLoaded", () => {
   menu.addEventListener("click", () => navLinks.classList.toggle("show"));
 });
 
-// Language select
-document.getElementById('language').addEventListener('change', function() {
-  var language = this.value;
-  if (language) {
-    var select = document.querySelector('select.goog-te-combo');
-    if (select) {
-      select.value = language;
-      select.dispatchEvent(new Event('change'));
-    }
-  }
-});

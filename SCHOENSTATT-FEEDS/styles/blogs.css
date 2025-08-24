@@ -1,52 +1,86 @@
+:root {
+  --bg-panel: #181433;
+  --bg-dark: #0d0b1f;
+  --glass-color: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent: #9f43f0;
+  --text-light: #eee;
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
+/* Hide the Google Translate banner */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+} 
+
+
+/* Optional: Hide the mini translate logo */
+.goog-logo-link {
+  display: none !important;
+}
+.goog-te-gadget {
+  display: none !important;
+}
+
 
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background: #f9f9f9;
-  color: #222;
+  top: 0px !important;
+  background: var(--bg-panel);
+  color: var(--text-light);
 }
-
 header {
-  background: #1f43d5;
-  color: #fff;
-  padding: 1rem;
-}
-
-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--bg-panel);
+  padding: 1rem 2rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
+  z-index: 100;
 }
-
-nav .logo {
-  font-weight: bold;
-  font-size: 1.2rem;
+header img {
+  width: 50px;
+  border-radius: 50%;
 }
-
-nav .nav-links {
+header nav {
+  position: relative;
+}
+header .nav-links {
+  list-style: none;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
-
-nav .nav-links a {
-  color: #fff;
+header .nav-links li a {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: color 0.3s;
   text-decoration: none;
 }
-
-nav .nav-links a.active {
-  border-bottom: 2px solid #fff;
+header .nav-links li a:hover {
+  color: var(--accent);
 }
-
-#menu-toggle {
+.menu-toggle {
   display: none;
   cursor: pointer;
-  font-size: 1.5rem;
+}
+.social a {
+  color: var(--text-light);
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+.lang select {
+  background: var(--bg-dark);
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 5px;
+  padding: 0.2rem;
 }
 
 .blog-header {
@@ -64,6 +98,8 @@ nav .nav-links a.active {
   max-width: 400px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-top: 20px;
+  outline: none;
 }
 
 .blogs-container {
@@ -143,8 +179,9 @@ nav .nav-links a.active {
     display: none;
     flex-direction: column;
     gap: 0.5rem;
-    background: #1f43d5;
+    background: var(--accent);
     padding: 1rem;
+    border-radius: 10px;
   }
 
   .nav-links.show {
