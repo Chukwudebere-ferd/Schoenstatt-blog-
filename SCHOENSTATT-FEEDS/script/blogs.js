@@ -29,9 +29,7 @@ const modalImg = document.getElementById("modalImage");
 const modalClose = imageModal?.querySelector(".close") ?? null;
 
 // guard
-if (!blogsContainer) {
-  console.error("blogsContainer element not found. Make sure #blogsContainer exists in HTML.");
-}
+if (!blogsContainer) console.error("blogsContainer element not found. Make sure #blogsContainer exists in HTML.");
 
 // store all blogs for searching
 let blogsData = [];
@@ -44,14 +42,11 @@ let galleryIndex = 0;
 function parseDate(doc) {
   const d = doc?.createdAt ?? doc?.timestamp ?? doc?.date;
   if (!d) return "";
-  // Firestore Timestamp has toDate()
   if (typeof d?.toDate === "function") return d.toDate().toLocaleString();
-  // d might be ISO string
   if (typeof d === "string") {
     const dt = new Date(d);
     return isNaN(dt) ? d : dt.toLocaleString();
   }
-  // numeric millis
   if (typeof d === "number") return new Date(d).toLocaleString();
   return "";
 }
@@ -60,13 +55,35 @@ function getContentText(doc) {
   return (doc.content ?? doc.description ?? "").toString();
 }
 
+/* ================= MODAL / GALLERY ================= */
 function openGallery(images, startIndex = 0) {
   if (!imageModal || !modalImg) return;
   galleryImages = images;
   galleryIndex = startIndex;
+
   modalImg.src = galleryImages[galleryIndex] || "";
-  imageModal.style.display = "block";
-  // show/hide prev/next buttons
+  imageModal.style.display = "flex"; // flex for centering
+  modalImg.style.maxHeight = "80vh";
+  modalImg.style.maxWidth = "80vw";
+  modalImg.style.borderRadius = "12px";
+  modalImg.style.transition = "opacity 0.3s";
+
+  // add counter
+  let counter = imageModal.querySelector(".gallery-counter");
+  if (!counter) {
+    counter = document.createElement("div");
+    counter.className = "gallery-counter";
+    counter.style.position = "absolute";
+    counter.style.bottom = "20px";
+    counter.style.left = "50%";
+    counter.style.transform = "translateX(-50%)";
+    counter.style.color = "#fff";
+    counter.style.fontSize = "1rem";
+    counter.style.fontWeight = "bold";
+    imageModal.appendChild(counter);
+  }
+  counter.textContent = `${galleryIndex + 1} / ${galleryImages.length}`;
+
   updateModalNav();
 }
 
@@ -78,7 +95,6 @@ function closeGallery() {
   galleryIndex = 0;
 }
 
-/* create modal nav buttons if not present (once) */
 function ensureModalNav() {
   if (!imageModal) return;
   if (imageModal.querySelector(".gallery-prev") && imageModal.querySelector(".gallery-next")) return;
@@ -103,63 +119,63 @@ function updateModalNav() {
   const next = imageModal.querySelector(".gallery-next");
   if (prev) prev.style.display = (galleryIndex > 0) ? "block" : "none";
   if (next) next.style.display = (galleryIndex < galleryImages.length - 1) ? "block" : "none";
+
+  const counter = imageModal.querySelector(".gallery-counter");
+  if (counter) counter.textContent = `${galleryIndex + 1} / ${galleryImages.length}`;
 }
 
 function showPrev() {
   if (galleryIndex > 0) {
     galleryIndex--;
-    modalImg.src = galleryImages[galleryIndex];
-    updateModalNav();
+    modalImg.style.opacity = 0;
+    setTimeout(() => {
+      modalImg.src = galleryImages[galleryIndex];
+      modalImg.style.opacity = 1;
+      updateModalNav();
+    }, 200);
   }
 }
 function showNext() {
   if (galleryIndex < galleryImages.length - 1) {
     galleryIndex++;
-    modalImg.src = galleryImages[galleryIndex];
-    updateModalNav();
+    modalImg.style.opacity = 0;
+    setTimeout(() => {
+      modalImg.src = galleryImages[galleryIndex];
+      modalImg.style.opacity = 1;
+      updateModalNav();
+    }, 200);
   }
 }
 
-/* close modal on outside click or close button */
-if (imageModal) {
-  imageModal.addEventListener("click", (e) => {
-    if (e.target === imageModal) closeGallery();
-  });
-}
+/* modal close events */
+if (imageModal) imageModal.addEventListener("click", (e) => { if (e.target === imageModal) closeGallery(); });
 if (modalClose) modalClose.addEventListener("click", closeGallery);
-
-/* keyboard navigation for modal */
 document.addEventListener("keydown", (e) => {
-  if (!imageModal || imageModal.style.display !== "block") return;
+  if (!imageModal || imageModal.style.display !== "flex") return;
   if (e.key === "ArrowLeft") showPrev();
   if (e.key === "ArrowRight") showNext();
   if (e.key === "Escape") closeGallery();
 });
 
-/* ================= load & render ================= */
+/* ================= LOAD & DISPLAY BLOGS ================= */
 async function loadBlogs() {
   if (!blogsContainer) return;
   blogsContainer.innerHTML = "<p>Loading blogs...</p>";
 
   let snapshot;
   try {
-    // prefer ordering by createdAt (if exists)
     snapshot = await getDocs(query(collection(db, "blogs"), orderBy("createdAt", "desc")));
   } catch (errOrder) {
-    // fallback: maybe docs lack createdAt — just fetch all
-    console.warn("orderBy(createdAt) failed, falling back to un-ordered getDocs()", errOrder);
+    console.warn("orderBy(createdAt) failed, fetching unordered:", errOrder);
     snapshot = await getDocs(collection(db, "blogs"));
   }
 
   const docs = snapshot.docs || [];
   blogsData = docs.map(d => ({ id: d.id, ...d.data() }));
-
   displayBlogs(blogsData);
-  // ensure modal nav buttons exist
   ensureModalNav();
 }
 
-/* build DOM for blogs array */
 function displayBlogs(blogs) {
   if (!blogsContainer) return;
   blogsContainer.innerHTML = "";
@@ -169,38 +185,31 @@ function displayBlogs(blogs) {
     return;
   }
 
-  // create a fragment for better perf
   const frag = document.createDocumentFragment();
 
-  blogs.forEach((b) => {
+  blogs.forEach(b => {
     const title = b.title ?? "Untitled";
     const content = getContentText(b);
     const images = Array.isArray(b.images) ? b.images : (b.imageUrl ? [b.imageUrl] : []);
     const dateStr = parseDate(b) || "";
 
-    // card
     const card = document.createElement("article");
     card.className = "blog-card";
 
-    // image gallery preview (first image + count)
+    // Image gallery preview
     if (images.length) {
       const gallery = document.createElement("div");
       gallery.className = "image-gallery";
 
-      // show up to 4 thumbs in preview
       images.slice(0, 4).forEach((url, idx) => {
         const thumb = document.createElement("img");
         thumb.src = url;
         thumb.alt = `${title} image ${idx + 1}`;
         thumb.className = "gallery-thumb";
-        thumb.addEventListener("click", (e) => {
-          e.stopPropagation();
-          openGallery(images, idx);
-        });
+        thumb.addEventListener("click", (e) => { e.stopPropagation(); openGallery(images, idx); });
         gallery.appendChild(thumb);
       });
 
-      // if there are more, show a "+N" overlay on last thumb
       if (images.length > 4) {
         const moreCount = images.length - 4;
         const last = gallery.lastElementChild;
@@ -251,24 +260,24 @@ function displayBlogs(blogs) {
       });
       card.appendChild(p);
       card.appendChild(btn);
-    } else {
-      p.textContent = content;
-      card.appendChild(p);
-    }
+    } else card.appendChild(p);
 
-    // meta
+    // meta with verified badge
     const meta = document.createElement("div");
     meta.className = "blog-meta";
-    meta.innerHTML = `
-      <small class="blog-date">${dateStr}</small>
-      ${b.author ? `<small class="blog-author"> • ${b.author}</small>` : ""}
+    const verifiedBadge = `
+      <svg xmlns="http://www.w3.org/2000/svg" 
+           width="16" height="16" viewBox="0 0 24 24" fill="var(--accent)">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 
+                 12-12S18.627 0 12 0zm-1.2 17.4l-4.8-4.8 1.68-1.68 
+                 3.12 3.12 6.72-6.72 1.68 1.68-8.4 8.4z"/>
+      </svg>
     `;
+    meta.innerHTML = `<small class="blog-date">${dateStr}</small><span class="blog-author">${verifiedBadge}</span>`;
     card.appendChild(meta);
 
-    // click whole card -> open gallery if any images (user wanted clickable)
-    card.addEventListener("click", () => {
-      if (images.length) openGallery(images, 0);
-    });
+    // click card -> open gallery
+    card.addEventListener("click", () => { if (images.length) openGallery(images, 0); });
 
     frag.appendChild(card);
   });
@@ -276,16 +285,15 @@ function displayBlogs(blogs) {
   blogsContainer.appendChild(frag);
 }
 
-/* ================= search (live on keypress) ================= */
+/* ================= search ================= */
 if (searchInput) {
   searchInput.addEventListener("keyup", (e) => {
     const term = (e.target.value || "").toLowerCase().trim();
     if (!term) return displayBlogs(blogsData);
     const filtered = blogsData.filter(b => {
-      const title = (b.title ?? "").toString().toLowerCase();
+      const title = (b.title ?? "").toLowerCase();
       const content = getContentText(b).toLowerCase();
-      const author = (b.author ?? "").toString().toLowerCase();
-      return title.includes(term) || content.includes(term) || author.includes(term);
+      return title.includes(term) || content.includes(term);
     });
     displayBlogs(filtered);
   });
